@@ -1,0 +1,163 @@
+﻿@using RoleBasedAuthSystem.Models.ViewModels
+@model LoginViewModel
+@{
+    ViewData["Title"] = "Login";
+}
+
+<div class="min-vh-100 d-flex align-items-center" style="background: linear-gradient(-45deg, #667eea, #764ba2, #6B8DD6, #8E37D7); background-size: 400% 400%; animation: gradientBG 15s ease infinite;">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-10">
+                <div class="card border-0 shadow-lg overflow-hidden animate__animated animate__fadeInUp" style="border-radius: 1.5rem; backdrop-filter: blur(12px); background: rgba(255,255,255,0.15);">
+                    <div class="row g-0">
+                        <!-- Left Side - Welcome / Branding -->
+                        <div class="col-lg-6 d-none d-lg-block bg-gradient-primary text-white p-5 position-relative overflow-hidden">
+                            <div class="position-absolute top-0 start-0 w-100 h-100 opacity-25" style="background: radial-gradient(circle at 30% 20%, rgba(255,255,255,0.4) 0%, transparent 60%);"></div>
+                            <div class="d-flex flex-column h-100 justify-content-center position-relative z-1">
+                                <h2 class="display-5 fw-bold mb-4 animate__animated animate__fadeInDown">Welcome Back!</h2>
+                                <p class="lead opacity-75 mb-5 animate__animated animate__fadeIn animate__delay-1s">
+                                    We're glad to see you again. Log in to continue your journey.
+                                </p>
+                                <div class="mt-auto">
+                                    <small>Not a member yet?</small><br>
+                                    <a href="@Url.Action("Register")" class="text-white fw-bold text-decoration-none">Create an account →</a>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Right Side - Form -->
+                        <div class="col-lg-6 p-5 p-lg-5">
+                            <div class="text-center mb-5">
+                                <h3 class="fw-bold mb-1">Sign In</h3>
+                                <p class="text-muted">Enter your credentials to access your account</p>
+                            </div>
+
+                            <form asp-action="Login" method="post">
+                                <div asp-validation-summary="ModelOnly" class="text-danger text-center mb-4"></div>
+
+                                <div class="form-floating mb-4">
+                                    <input asp-for="Email" class="form-control" id="floatingEmail" placeholder="name@example.com" autocomplete="email" required />
+                                    <label for="floatingEmail">Email address</label>
+                                    <span asp-validation-for="Email" class="text-danger"></span>
+                                </div>
+
+                                <div class="form-floating mb-4 position-relative">
+                                    <input asp-for="Password" class="form-control pe-5" id="floatingPassword" placeholder="Password" type="password" autocomplete="current-password" required />
+                                    <label for="floatingPassword">Password</label>
+                                    <button type="button" class="btn btn-link position-absolute top-50 end-0 translate-middle-y pe-3" onclick="togglePassword('floatingPassword', this)">
+                                        <i class="bi bi-eye-slash"></i>
+                                    </button>
+                                    <span asp-validation-for="Password" class="text-danger"></span>
+                                </div>
+
+                                <div class="d-flex justify-content-between align-items-center mb-4">
+                                    <div class="form-check">
+                                        <input asp-for="RememberMe" class="form-check-input" type="checkbox" id="rememberMe" />
+                                        <label class="form-check-label" for="rememberMe">Remember me</label>
+                                    </div>
+                                    <a href="#" class="small text-decoration-none">Forgot password?</a>
+                                </div>
+
+                                <button type="submit" class="btn btn-primary w-100 btn-lg fw-bold position-relative overflow-hidden">
+                                    <span class="btn-text">Login</span>
+                                    <span class="ripple"></span>
+                                </button>
+
+                                <!-- In Login.cshtml -->
+
+                                <div class="mt-4">
+                                    <p class="text-center text-muted">— or sign in with —</p>
+
+                                    <div class="d-grid gap-3">
+                                        <a asp-action="ExternalLogin" asp-route-provider="Google"
+                                           class="btn btn-outline-danger d-flex align-items-center justify-content-center gap-2 py-3">
+                                            <i class="bi bi-google fs-5"></i> Continue with Google
+                                        </a>
+
+                                        <a asp-action="ExternalLogin" asp-route-provider="MicrosoftAccount"
+                                           class="btn btn-outline-primary d-flex align-items-center justify-content-center gap-2 py-3">
+                                            <i class="bi bi-microsoft fs-5"></i> Continue with Microsoft
+                                        </a>
+                                    </div>
+                                </div>
+                            </form>
+
+                            <div class="text-center mt-4">
+                                <small class="text-muted">Don't have an account? <a href="@Url.Action("Register")" class="fw-bold text-primary text-decoration-none">Sign up</a></small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <script>
+        function togglePassword(inputId, button) {
+            const input = document.getElementById(inputId);
+            const icon = button.querySelector('i');
+            if (input.type === 'password') {
+                input.type = 'text';
+                icon.classList.remove('bi-eye-slash');
+                icon.classList.add('bi-eye');
+            } else {
+                input.type = 'password';
+                icon.classList.remove('bi-eye');
+                icon.classList.add('bi-eye-slash');
+            }
+        }
+    </script>
+    <style>
+        @@keyframes gradientBG {
+            0%
+
+        {
+            background-position: 0% 50%;
+        }
+
+        50% {
+            background-position: 100% 50%;
+        }
+
+        100% {
+            background-position: 0% 50%;
+        }
+
+        }
+
+        .animate__fadeInUp {
+            animation-duration: 0.9s;
+        }
+
+        .btn-primary {
+            transition: all 0.3s;
+        }
+
+            .btn-primary:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 10px 20px rgba(108,99,255,0.4);
+            }
+
+        .ripple {
+            position: absolute;
+            background: rgba(255,255,255,0.3);
+            border-radius: 50%;
+            transform: scale(0);
+            animation: rippleAnim 0.6s linear;
+            pointer-events: none;
+        }
+        @@keyframes rippleAnim {
+            to
+
+        {
+            transform: scale(4);
+            opacity: 0;
+        }
+
+        }
+    </style>
+}

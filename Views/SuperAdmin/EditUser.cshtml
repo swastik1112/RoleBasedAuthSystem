@@ -1,0 +1,37 @@
+﻿@using RoleBasedAuthSystem.Models.ViewModels
+@model EditUserViewModel
+@{
+    ViewData["Title"] = "Edit User";
+}
+
+<div class="container py-5">
+    <div class="glass-card p-5 mx-auto" style="max-width: 600px; color: white;">
+        <h2 class="text-center fw-bold mb-5 animate__animated animate__fadeInDown">Edit User</h2>
+
+        <form asp-action="EditUser" method="post">
+            <input type="hidden" asp-for="Id" />
+
+            <div class="form-floating mb-4">
+                <input asp-for="Email" class="form-control bg-transparent text-white border-light" id="email" placeholder="Email" required />
+                <label for="email" class="text-white">Email address</label>
+                <span asp-validation-for="Email" class="text-danger"></span>
+            </div>
+
+            <div class="form-floating mb-5">
+                <select asp-for="Role" class="form-select bg-transparent text-white border-light" id="role">
+                    @foreach (var role in ViewBag.Roles)
+                    {
+                        <option value="@role.Name" selected="@(role.Name == Model.Role)">@role.Name</option>
+                    }
+                </select>
+                <label for="role" class="text-white">Assign Role</label>
+            </div>
+
+            <button type="submit" class="btn btn-primary w-100 btn-lg fw-bold btn-ripple">Save Changes</button>
+        </form>
+
+        <div class="text-center mt-4">
+            <a asp-action="ManageUsers" class="text-white text-decoration-none">← Back to Users</a>
+        </div>
+    </div>
+</div>

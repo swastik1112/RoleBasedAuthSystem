@@ -1,0 +1,89 @@
+﻿@{
+    ViewData["Title"] = "My Dashboard";
+}
+
+<div class="container py-5 animate__animated animate__fadeIn">
+    <div class="glass-card p-5 text-white text-center">
+        <div class="text-center mb-5">
+            <div class="position-relative d-inline-block mb-3">
+                <img src="@Model.ProfilePictureUrl"
+                     alt="Profile Picture"
+                     class="rounded-circle shadow-lg"
+                     style="width: 140px; height: 140px; object-fit: cover; border: 4px solid rgba(255,255,255,0.4);" />
+
+                <a asp-action="Profile" class="position-absolute bottom-0 end-0 btn btn-sm btn-primary rounded-circle p-2 shadow" title="Edit Profile">
+                    <i class="bi bi-pencil-fill"></i>
+                </a>
+            </div>
+
+            <h1 class="display-5 fw-bold">Welcome back, @Model.FullName!</h1>
+            <p class="lead opacity-75">(@User.Identity?.Name)</p>
+        </div>
+
+        <div class="row g-4 justify-content-center mt-5">
+            <!-- Personal Info Card -->
+            <div class="col-md-6 col-lg-5">
+                <div class="card-hover glass-card p-4 h-100">
+                    <h4 class="fw-bold mb-4 text-center">
+                        <i class="bi bi-person-badge-fill me-2 text-info"></i>
+                        Your Profile
+                    </h4>
+
+                    <div class="list-group list-group-flush bg-transparent">
+                        <div class="list-group-item bg-transparent border-light border-opacity-25 text-white px-0 py-3 d-flex justify-content-between">
+                            <span>Email:</span>
+                            <strong>@User.Identity?.Name</strong>
+                        </div>
+                        <div class="list-group-item bg-transparent border-light border-opacity-25 text-white px-0 py-3 d-flex justify-content-between">
+                            <span>Role:</span>
+                            <span class="badge bg-success fs-6 px-3 py-2">User</span>
+                        </div>
+                        <div class="list-group-item bg-transparent border-light border-opacity-25 text-white px-0 py-3 d-flex justify-content-between">
+                            <span>Member since:</span>
+                            <strong>Soon™</strong>
+                        </div>
+                    </div>
+
+                    <div class="text-center mt-4">
+                        <button class="btn btn-outline-light btn-lg px-5 btn-ripple" disabled>
+                            Edit Profile (coming soon)
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Quick Actions / Welcome Message Card -->
+            <div class="col-md-6 col-lg-5">
+                <div class="card-hover glass-card p-4 h-100 d-flex flex-column justify-content-between">
+                    <div>
+                        <h4 class="fw-bold mb-4 text-center">
+                            <i class="bi bi-stars me-2 text-warning"></i>
+                            Quick Start
+                        </h4>
+                        <p class="opacity-75 text-center mb-4">
+                            As a regular user you can:
+                        </p>
+                        <ul class="list-unstyled text-start opacity-90">
+                            <li class="mb-3"><i class="bi bi-check-circle-fill text-success me-2"></i>View your personal dashboard</li>
+                            <li class="mb-3"><i class="bi bi-check-circle-fill text-success me-2"></i>Update profile (coming soon)</li>
+                            <li class="mb-3"><i class="bi bi-check-circle-fill text-success me-2"></i>Access protected content</li>
+                        </ul>
+                    </div>
+
+                    <div class="text-center mt-4">
+                        <a asp-controller="Account" asp-action="Logout"
+                           class="btn btn-outline-danger btn-lg px-5 btn-ripple">
+                            Sign Out
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="mt-5 pt-4 border-top border-light border-opacity-25 opacity-75 text-center">
+            <small>
+                This is your personal space • Admins & SuperAdmins cannot see your private data
+            </small>
+        </div>
+    </div>
+</div>

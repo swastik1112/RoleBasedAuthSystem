@@ -1,0 +1,327 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - RoleBasedAuthSystem</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
+
+    @RenderSection("Styles", required: false)
+
+    <style>
+        /* Light mode (default) */
+        :root {
+            --bg-gradient-start: #667eea;
+            --bg-gradient-end: #764ba2;
+            --glass-bg: rgba(255, 255, 255, 0.18);
+            --glass-border: rgba(255, 255, 255, 0.2);
+            --text-color: #333;
+            --text-muted: #555;
+            --card-shadow: 0 8px 32px rgba(31, 38, 135, 0.25);
+        }
+
+        /* Dark mode */
+        [data-theme="dark"] {
+            --bg-gradient-start: #0f0c29;
+            --bg-gradient-end: #302b63;
+            --glass-bg: rgba(30, 30, 50, 0.35);
+            --glass-border: rgba(100, 100, 150, 0.3);
+            --text-color: #e0e0ff;
+            --text-muted: #a0a0cc;
+            --card-shadow: 0 8px 32px rgba(0, 0, 0, 0.6);
+        }
+
+        body {
+            background: linear-gradient(-45deg, var(--bg-gradient-start), var(--bg-gradient-end), #6B8DD6, #8E37D7);
+            background-size: 400% 400%;
+            animation: gradientBG 18s ease infinite;
+            color: var(--text-color);
+            transition: background 0.5s ease, color 0.5s ease;
+        }
+
+        .glass-card {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            box-shadow: var(--card-shadow);
+            backdrop-filter: blur(12px);
+            color: var(--text-color);
+        }
+
+        .text-muted {
+            color: var(--text-muted) !important;
+        }
+
+        .navbar {
+            background: rgba(0,0,0,0.25) !important;
+            backdrop-filter: blur(10px);
+        }
+
+        /* Toggle switch styling */
+        .theme-toggle {
+            position: relative;
+            display: inline-block;
+            width: 60px;
+            height: 34px;
+        }
+
+            .theme-toggle input {
+                opacity: 0;
+                width: 0;
+                height: 0;
+            }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            transition: .4s;
+            border-radius: 34px;
+        }
+
+            .slider:before {
+                position: absolute;
+                content: "";
+                height: 26px;
+                width: 26px;
+                left: 4px;
+                bottom: 4px;
+                background-color: white;
+                transition: .4s;
+                border-radius: 50%;
+            }
+
+        input:checked + .slider {
+            background-color: #2196F3;
+        }
+
+            input:checked + .slider:before {
+                transform: translateX(26px);
+            }
+
+        /* Sun / Moon icons inside toggle */
+        .slider:after {
+            content: '☀️';
+            position: absolute;
+            top: 5px;
+            left: 7px;
+            font-size: 15px;
+            color: #333;
+            transition: opacity 0.3s;
+        }
+
+        input:checked + .slider:after {
+            content: '🌙';
+            left: auto;
+            right: 8px;
+            color: white;
+        }
+
+        /* Staggered entrance animation */
+        .animate-on-scroll {
+            opacity: 0;
+            transform: translateY(50px);
+            transition: opacity 0.8s ease-out, transform 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+
+            .animate-on-scroll.visible {
+                opacity: 1;
+                transform: translateY(0);
+            }
+
+        /* Optional: extra polish for glass cards */
+        .glass-card.animate-on-scroll {
+            transition-delay: calc(var(--delay) * 0.15s); /* stagger effect controlled by --delay */
+        }
+
+        /* Optional: hover lift (already had, but enhanced) */
+        .glass-card {
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+            .glass-card:hover {
+                transform: translateY(-12px) scale(1.02);
+                box-shadow: 0 25px 50px rgba(0, 0, 0, 0.35) !important;
+            }
+    </style>
+</head>
+<body>
+
+    <header>
+        <nav class="navbar navbar-expand-lg navbar-dark shadow-sm" style="background: rgba(0,0,0,0.2); backdrop-filter: blur(10px);">
+            <div class="container">
+                <a class="navbar-brand fw-bold fs-4" href="/">RoleAuth</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav me-auto">
+                        <li class="nav-item">
+                            <a class="nav-link" asp-controller="Home" asp-action="Index">Home</a>
+                        </li>
+
+                        @if (User.IsInRole("SuperAdmin"))
+                        {
+                            <li class="nav-item"><a class="nav-link" asp-controller="SuperAdmin" asp-action="Dashboard">Super Dashboard</a></li>
+                            <li class="nav-item"><a class="nav-link" asp-controller="SuperAdmin" asp-action="ManageUsers">Manage Users</a></li>
+                        }
+                        @if (User.IsInRole("Admin"))
+                        {
+                            <li class="nav-item"><a class="nav-link" asp-controller="Admin" asp-action="Dashboard">Admin Dashboard</a></li>
+                            <li class="nav-item"><a class="nav-link" asp-controller="Admin" asp-action="ManageUsers">Manage Users</a></li>
+                        }
+                        @if (User.IsInRole("User"))
+                        {
+                            <li class="nav-item"><a class="nav-link" asp-controller="User" asp-action="Dashboard">My Dashboard</a></li>
+                        }
+
+                        @if (User.IsInRole("Admin") || User.IsInRole("SuperAdmin"))
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link" asp-controller="Calendar" asp-action="Index">
+                                    <i class="bi bi-calendar-event me-1"></i> Calendar
+                                </a>
+                            </li>
+                        }
+                        @if (TempData["SuccessMessage"] != null)
+                        {
+                            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                                @TempData["SuccessMessage"]
+                                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                            </div>
+                        }
+                        @if (TempData["ErrorMessage"] != null)
+                        {
+                            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                                @TempData["ErrorMessage"]
+                                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                            </div>
+                        }
+                        
+                    </ul>
+
+                    <!-- ... existing navbar content ... -->
+
+                    <div class="ms-auto d-flex align-items-center">
+                        <!-- Theme Toggle -->
+                        <label class="theme-toggle me-3" title="Toggle Dark/Light Mode">
+                            <input type="checkbox" id="themeSwitch" />
+                            <span class="slider"></span>
+                        </label>
+
+                        <partial name="_LoginPartial" />
+                    </div>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main class="container my-5">
+        @RenderBody()
+    </main>
+
+    <footer class="text-center py-4 text-white-50" style="background: rgba(0,0,0,0.3);">
+        <small>© @DateTime.Now.Year RoleBasedAuthSystem • Made with passion</small>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Theme handling
+        const themeSwitch = document.getElementById('themeSwitch');
+        const htmlRoot = document.documentElement;
+
+        // Load saved theme or detect system preference
+        function loadTheme() {
+            const savedTheme = localStorage.getItem('theme');
+            if (savedTheme) {
+                htmlRoot.setAttribute('data-theme', savedTheme);
+                themeSwitch.checked = savedTheme === 'dark';
+            } else {
+                // Use system preference
+                const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+                if (prefersDark) {
+                    htmlRoot.setAttribute('data-theme', 'dark');
+                    themeSwitch.checked = true;
+                    localStorage.setItem('theme', 'dark');
+                }
+            }
+        }
+
+        // Toggle theme
+        function toggleTheme() {
+            if (themeSwitch.checked) {
+                htmlRoot.setAttribute('data-theme', 'dark');
+                localStorage.setItem('theme', 'dark');
+            } else {
+                htmlRoot.setAttribute('data-theme', 'light');
+                localStorage.setItem('theme', 'light');
+            }
+        }
+
+        // Event listener
+        themeSwitch.addEventListener('change', toggleTheme);
+
+        // Initial load
+        loadTheme();
+
+        // Listen for system theme changes (optional)
+        window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', e => {
+            if (!localStorage.getItem('theme')) {  // only if user didn't manually choose
+                htmlRoot.setAttribute('data-theme', e.matches ? 'dark' : 'light');
+                themeSwitch.checked = e.matches;
+            }
+        });
+    </script>
+    @await RenderSectionAsync("Scripts", required: false)
+
+    <button id="backToTop" class="btn btn-primary rounded-circle shadow-lg position-fixed bottom-0 end-0 m-4 d-none"
+            style="width: 50px; height: 50px; z-index: 1000;">
+        <i class="bi bi-arrow-up fs-4"></i>
+    </button>
+
+    <script>
+        const backToTop = document.getElementById('backToTop');
+        window.addEventListener('scroll', () => {
+            backToTop.classList.toggle('d-none', window.scrollY < 300);
+        });
+        backToTop.addEventListener('click', () => {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+    </script>
+
+    <script>
+        // Staggered card entrance using Intersection Observer
+        document.addEventListener('DOMContentLoaded', () => {
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach((entry, index) => {
+                    if (entry.isIntersecting) {
+                        // Add visible class with slight delay for stagger
+                        setTimeout(() => {
+                            entry.target.classList.add('visible');
+                        }, index * 120); // 120ms delay between each card
+
+                        // Stop observing once animated (performance)
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, {
+                threshold: 0.15,          // trigger when 15% of card is visible
+                rootMargin: '0px 0px -50px 0px' // start a bit earlier
+            });
+
+            // Find all cards that should animate
+            document.querySelectorAll('.animate-on-scroll').forEach((card, index) => {
+                // Optional: set custom delay via CSS variable
+                card.style.setProperty('--delay', index);
+                observer.observe(card);
+            });
+        });
+    </script>
+</body>
+</html>

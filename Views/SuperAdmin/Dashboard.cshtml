@@ -1,0 +1,88 @@
+﻿@using RoleBasedAuthSystem.Models.ViewModels
+@model SuperAdminDashboardViewModel
+@{
+    ViewData["Title"] = "SuperAdmin Dashboard";
+}
+
+<div class="container py-5 animate__animated animate__fadeIn">
+    <div class="glass-card p-5 text-white">
+        <div class="text-center mb-5">
+            <h1 class="display-5 fw-bold">SuperAdmin Control Center</h1>
+            <p class="lead opacity-75">System Overview • Full Access</p>
+        </div>
+
+        <!-- Stats Cards Row -->
+        <div class="row g-4 mb-5">
+            <!-- Total Users -->
+            <div class="col-md-6 col-lg-3">
+                <div class="card-hover glass-card p-4 text-center h-100 shadow-lg">
+                    <i class="bi bi-people-fill display-4 text-primary mb-3"></i>
+                    <h5 class="fw-bold mb-1">Total Users</h5>
+                    <h2 class="display-6 fw-bold">@Model.TotalUsers</h2>
+                    <small class="opacity-75">All registered accounts</small>
+                </div>
+            </div>
+
+            <!-- Users by Role - Small badges style -->
+            <div class="col-md-6 col-lg-3">
+                <div class="card-hover glass-card p-4 text-center h-100 shadow-lg">
+                    <i class="bi bi-person-gear display-4 text-info mb-3"></i>
+                    <h5 class="fw-bold mb-2">Role Distribution</h5>
+                    <div class="d-flex flex-column gap-2">
+                        <div class="d-flex justify-content-between">
+                            <span>SuperAdmin</span>
+                            <span class="badge bg-danger fs-5 px-3">@Model.SuperAdminCount</span>
+                        </div>
+                        <div class="d-flex justify-content-between">
+                            <span>Admin</span>
+                            <span class="badge bg-warning text-dark fs-5 px-3">@Model.AdminCount</span>
+                        </div>
+                        <div class="d-flex justify-content-between">
+                            <span>User</span>
+                            <span class="badge bg-success fs-5 px-3">@Model.UserCount</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- New This Month -->
+            <div class="col-md-6 col-lg-3">
+                <div class="card-hover glass-card p-4 text-center h-100 shadow-lg position-relative">
+                    <i class="bi bi-calendar-plus-fill display-4 text-success mb-3"></i>
+                    <h5 class="fw-bold mb-1">New This Month</h5>
+                    <h2 class="display-6 fw-bold">@Model.NewThisMonth</h2>
+                    <small class="opacity-75">Registrations in @DateTime.Now.ToString("MMMM")</small>
+                </div>
+            </div>
+
+            <!-- Locked Accounts (if using lockout) -->
+            <div class="col-md-6 col-lg-3">
+                <div class="card-hover glass-card p-4 text-center h-100 shadow-lg">
+                    <i class="bi bi-shield-lock-fill display-4 text-danger mb-3"></i>
+                    <h5 class="fw-bold mb-1">Locked Accounts</h5>
+                    <h2 class="display-6 fw-bold text-danger">@Model.LockedAccounts</h2>
+                    <small class="opacity-75">Potential security issues</small>
+                </div>
+            </div>
+        </div>
+
+        <!-- Quick Actions Section (keep or expand your existing cards) -->
+        <div class="row g-4 justify-content-center">
+            <div class="col-md-4">
+                <div class="card-hover glass-card p-5 text-center">
+                    <i class="bi bi-people-fill display-3 text-info mb-4"></i>
+                    <h4 class="fw-bold mb-3">Manage Users</h4>
+                    <p class="opacity-75 mb-4">View, edit, assign roles</p>
+                    <a asp-action="ManageUsers" class="btn btn-outline-light btn-lg px-5 btn-ripple">
+                        Open →
+                    </a>
+                </div>
+            </div>
+            <!-- Add more action cards if needed -->
+        </div>
+
+        <div class="text-center mt-5 pt-4 border-top border-light border-opacity-25 opacity-75">
+            <small>Dashboard updated @DateTime.Now.ToString("MMM dd, yyyy HH:mm") IST</small>
+        </div>
+    </div>
+</div>

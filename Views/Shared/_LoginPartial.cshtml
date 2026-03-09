@@ -1,0 +1,62 @@
+﻿@using Microsoft.AspNetCore.Identity
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
+
+@if (SignInManager.IsSignedIn(User))
+{
+    var user = await UserManager.GetUserAsync(User);
+    var avatarUrl = user?.ProfilePicture != null
+        ? $"/User/GetProfilePicture/{user.Id}"
+        : "/images/user.png";  // fallback image in wwwroot/images
+
+    <ul class="navbar-nav ms-auto align-items-center">
+        <li class="nav-item d-flex align-items-center gap-3">
+            <!-- Avatar + Name -->
+            <div class="d-flex align-items-center gap-2">
+                <img src="@avatarUrl"
+                     alt="User Avatar"
+                     class="rounded-circle shadow-sm"
+                     style="width: 38px; height: 38px; object-fit: cover; border: 2px solid rgba(255,255,255,0.4);"
+                     onerror="this.src='/images/default-avatar.png';" />
+
+                <span class="text-white fw-medium d-none d-md-inline">
+                    @if (!string.IsNullOrEmpty(user?.FullName))
+                    {
+                        @user.FullName
+                    }
+                    else
+                    {
+                        @User.Identity?.Name
+                    }
+                </span>
+            </div>
+
+            <!-- Logout button -->
+            <form asp-controller="Account" asp-action="Logout" method="post" class="mb-0">
+                @Html.AntiForgeryToken()
+                <button type="submit" class="btn btn-outline-light btn-sm px-3 rounded-pill">
+                    Logout
+                </button>
+            </form>
+        </li>
+    </ul>
+}
+else
+{
+    <ul class="navbar-nav ms-auto align-items-center gap-3">
+        <li class="nav-item">
+            <a class="btn btn-outline-light rounded-4 px-4 py-2 fw-medium backdrop-blur-sm"
+               style="background: linear-gradient(135deg, #667eea, #764ba2); border: none;"
+               asp-controller="Account" asp-action="Register">
+                Register
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="btn btn-outline-light rounded-4 px-4 py-2 fw-medium backdrop-blur-sm"
+               style="background: linear-gradient(135deg, #667eea, #764ba2); border: none;"
+               asp-controller="Account" asp-action="Login">
+                Login
+            </a>
+        </li>
+    </ul>
+}

@@ -1,0 +1,49 @@
+﻿@using RoleBasedAuthSystem.Models.ViewModels
+@model EditUserViewModel
+
+@{
+    ViewData["Title"] = "Edit User";
+}
+
+<div class="container py-5">
+    <div class="glass-card p-5 mx-auto" style="max-width: 580px; color: white;">
+        <div class="text-center mb-5">
+            <i class="bi bi-person-gear display-4 mb-3"></i>
+            <h2 class="fw-bold">Edit User</h2>
+            <p class="opacity-75">Modify user information</p>
+        </div>
+
+        <form asp-action="EditUser" method="post">
+            <input type="hidden" asp-for="Id" />
+
+            <div class="form-floating mb-4">
+                <input asp-for="Email" class="form-control bg-transparent text-white border-light"
+                       id="floatingEmail" placeholder="name@example.com" required />
+                <label for="floatingEmail" class="text-white">Email address</label>
+                <span asp-validation-for="Email" class="text-danger"></span>
+            </div>
+
+            <!-- For Admin - role is fixed to User (no dropdown) -->
+            <input type="hidden" asp-for="Role" value="User" />
+
+            <div class="alert alert-info border-0 bg-info bg-opacity-25 text-white mt-4 mb-5">
+                <i class="bi bi-info-circle me-2"></i>
+                As an Admin, you can only modify regular users.<br>
+                Role remains <strong>User</strong>.
+            </div>
+
+            <div class="d-grid gap-3 d-md-flex justify-content-md-between">
+                <a asp-action="ManageUsers" class="btn btn-outline-light btn-lg px-5 btn-ripple">
+                    ← Cancel
+                </a>
+                <button type="submit" class="btn btn-primary btn-lg px-5 fw-bold btn-ripple">
+                    Save Changes
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

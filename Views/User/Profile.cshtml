@@ -1,0 +1,61 @@
+﻿@using RoleBasedAuthSystem.Models.ViewModels
+@model ProfileViewModel
+@{
+    ViewData["Title"] = "My Profile";
+}
+
+<div class="container py-5">
+    <div class="glass-card p-5 mx-auto" style="max-width: 680px; color: white;">
+        <div class="text-center mb-5">
+            <div class="position-relative d-inline-block mb-4">
+                <img src="@Model.ProfilePictureUrl"
+                     alt="Your Profile Picture"
+                     class="rounded-circle shadow-lg"
+                     style="width: 180px; height: 180px; object-fit: cover; border: 5px solid rgba(255,255,255,0.3);" />
+
+                <span class="position-absolute bottom-0 end-0 badge bg-success p-2 rounded-circle" title="Change picture">
+                    <i class="bi bi-camera-fill fs-5"></i>
+                </span>
+            </div>
+            <h2 class="fw-bold">My Profile</h2>
+            <p class="lead opacity-75">Update your personal information</p>
+        </div>
+
+        @if (TempData["SuccessMessage"] != null)
+        {
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                @TempData["SuccessMessage"]
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+        }
+
+        <form asp-action="Profile" method="post" enctype="multipart/form-data">
+            <div asp-validation-summary="ModelOnly" class="text-danger text-center mb-4"></div>
+
+            <div class="form-floating mb-4">
+                <input asp-for="FullName" class="form-control bg-transparent text-white border-light" id="fullName" placeholder="Full Name" />
+                <label for="fullName" class="text-white">Full Name</label>
+                <span asp-validation-for="FullName" class="text-danger"></span>
+            </div>
+
+            <div class="mb-5">
+                <label class="form-label text-white d-block">Profile Picture</label>
+                <input asp-for="ProfilePictureFile" type="file" accept="image/*" class="form-control bg-transparent text-white border-light" />
+                <small class="text-white-50">Max 2MB • JPG, PNG, GIF</small>
+            </div>
+
+            <div class="d-grid gap-3 d-md-flex justify-content-md-between">
+                <a asp-action="Dashboard" class="btn btn-outline-light btn-lg px-5 btn-ripple">
+                    ← Back to Dashboard
+                </a>
+                <button type="submit" class="btn btn-primary btn-lg px-5 fw-bold btn-ripple">
+                    Save Profile
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

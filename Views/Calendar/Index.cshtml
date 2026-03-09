@@ -1,0 +1,55 @@
+﻿@{
+    ViewData["Title"] = "Calendar & Events";
+}
+
+<div class="container py-4">
+    <div class="glass-card p-4 p-md-5">
+        <h2 class="fw-bold mb-4 text-center text-white">Event Calendar</h2>
+
+        <div id="calendar"></div>
+    </div>
+</div>
+
+@section Styles {
+    <link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.15/index.global.min.css" rel="stylesheet" />
+}
+
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.15/index.global.min.js"></script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            var calendarEl = document.getElementById('calendar');
+
+            var calendar = new FullCalendar.Calendar(calendarEl, {
+                initialView: 'dayGridMonth',           // month view default
+                headerToolbar: {
+                    left: 'prev,next today',
+                    center: 'title',
+                    right: 'dayGridMonth,timeGridWeek,timeGridDay,listWeek'
+                },
+                editable: false,                        // change to true if you want drag & drop
+                selectable: false,                      // change to true for selection
+                events: '/Calendar/GetEvents',          // your API endpoint
+                eventClick: function(info) {
+                    alert(
+                        'Event: ' + info.event.title + '\n' +
+                        'Type: ' + (info.event.extendedProps.type || 'N/A') + '\n' +
+                        'Description: ' + (info.event.extendedProps.description || 'No description') + '\n' +
+                        'Start: ' + info.event.start.toLocaleString()
+                    );
+                },
+                eventDidMount: function(info) {
+                    // Optional: tooltip on hover
+                    info.el.title = info.event.extendedProps.description || info.event.title;
+                },
+                // Respect dark mode (if you have data-theme="dark")
+                themeSystem: 'standard',
+                height: 'auto',
+                contentHeight: 'auto'
+            });
+
+            calendar.render();
+        });
+    </script>
+}

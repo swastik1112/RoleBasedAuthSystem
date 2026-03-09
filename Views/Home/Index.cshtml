@@ -1,0 +1,46 @@
+﻿@{
+    ViewData["Title"] = "Home";
+}
+
+<div class="container py-5 text-center text-white animate__animated animate__fadeIn">
+    <div class="glass-card p-5 mx-auto" style="max-width: 800px;">
+        <h1 class="display-3 fw-bold mb-4 animate__animated animate__zoomIn">Welcome to RoleAuth System</h1>
+        <p class="lead mb-5">A secure, role-based authentication platform built with ASP.NET Core 8 & Bootstrap 5</p>
+
+        <div class="row g-4 justify-content-center">
+            <div class="col-md-4">
+                <div class="card-hover glass-card p-4">
+                    <i class="bi bi-shield-lock-fill display-1 text-primary mb-3"></i>
+                    <h5>Secure Identity</h5>
+                    <p>Powered by ASP.NET Core Identity</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card-hover glass-card p-4">
+                    <i class="bi bi-person-gear display-1 text-success mb-3"></i>
+                    <h5>Role Management</h5>
+                    <p>SuperAdmin • Admin • User</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card-hover glass-card p-4">
+                    <i class="bi bi-speedometer2 display-1 text-warning mb-3"></i>
+                    <h5>Modern UI</h5>
+                    <p>Animated & Responsive Design</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="mt-5">
+            @if (!User.Identity.IsAuthenticated)
+            {
+                <a asp-controller="Account" asp-action="Register" class="btn btn-lg btn-primary btn-ripple me-3">Get Started</a>
+                <a asp-controller="Account" asp-action="Login" class="btn btn-lg btn-outline-light btn-ripple">Sign In</a>
+            }
+            else
+            {
+                <a asp-controller="@(User.IsInRole("SuperAdmin") ? "SuperAdmin" : User.IsInRole("Admin") ? "Admin" : "User")" asp-action="Dashboard" class="btn btn-lg btn-success btn-ripple">Go to Dashboard</a>
+            }
+        </div>
+    </div>
+</div>
